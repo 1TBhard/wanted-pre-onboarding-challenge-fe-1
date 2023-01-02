@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		// any 타입으로 추론될 때 error
+		"noImplicitAny": true,
+		"module": "es6",
+		"target": "es5",
+		"allowJs": true,
+		// import React from "react" 쓸 필요 없게하기
+		"jsx": "react-jsx",
+		"baseUrl": "./",
+		"paths": {
+			"src/*": ["./src/*"],
+			"public/*": ["./public/*"]
+		}
+		// "typeRoots": ["./node_modules/@types", "./src/@types"]
+	},
+	"include": ["./src", "public/testFolder", "src/index.tsx"],
+	"exclude": ["./node_modules", "./dist", "./public"]
+}
