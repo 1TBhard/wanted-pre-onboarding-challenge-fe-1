@@ -16,7 +16,7 @@ class UtilObject {
 
 		for (let i = 0; i < propNameList.length; i += 1) {
 			const propName = propNameList[i];
-			if (copyParam[propName] === null || copyParam[propName] === undefined) {
+			if (!!copyParam[propName] === false) {
 				delete copyParam[propName];
 			}
 		}
