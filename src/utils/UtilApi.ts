@@ -7,44 +7,13 @@ type Method = "GET" | "POST" | "DELETE" | "PUT";
 const DEFAULT_URL = "http://localhost:8080";
 const DEFAULT_HEADER = { "Content-Type": "application/json;charset=utf-8" };
 
+interface ApiDetail {
+	body?: Object;
+	params?: Object;
+	url: string;
+}
+
 class UtilApi {
-	private static async defaultFetch<T>({
-		url,
-		method,
-		headers,
-		body,
-	}: {
-		url: string;
-		method: Method;
-		headers?: RequestInit["headers"];
-		body?: RequestInit["body"];
-	}) {
-		const nextHeader = UtilObject.removeFalsy({
-			...DEFAULT_HEADER,
-			...headers,
-			Authorization: token.getToken(),
-		});
-
-		const response = await fetch(url, {
-			method,
-			body,
-			headers: nextHeader,
-		}).catch((error) => {
-			throw new CustomError({
-				customErrorMessage: "서버 연결이 되지 않았습니다. 다시 시도해주세요.",
-			});
-		});
-
-		if (response.ok) {
-			return (await response.json()) as T;
-		} else {
-			const errorResponse = await response.json();
-			throw new CustomError({
-				errorResponse,
-			});
-		}
-	}
-
 	private static generateNexturl({
 		url,
 		params,
@@ -60,24 +29,57 @@ class UtilApi {
 		return DEFAULT_URL + url + (paramsString ? `?${paramsString}` : "");
 	}
 
-	static get<T>({ url, params }: { url: string; params?: Object }) {
-		const getUrl = this.generateNexturl({ url, params });
-
-		return this.defaultFetch<T>({
-			url: getUrl,
-			method: "GET",
+	private static async defaultFetch<T>({
+		body = null,
+		params,
+		url,
+		method,
+	}: ApiDetail & { method: Method }) {
+		const removedFalsyBody = UtilObject.removeFalsy(body);
+		const nextUrl = this.generateNexturl({ url, params });
+		const nextHeader = UtilObject.removeFalsy({
+			...DEFAULT_HEADER,
+			Authorization: token.getToken(),
 		});
+
+		const response = await fetch(nextUrl, {
+			method,
+			body: UtilObject.isEmpty(removedFalsyBody)
+				? null
+				: JSON.stringify(removedFalsyBody),
+			headers: nextHeader,
+		}).catch((error) => {
+			throw new CustomError({
+				customErrorMessage: "서버 연결이 되지 않았습니다. 다시 시도해주세요.",
+			});
+		});
+
+		if (response.ok) {
+			return (await response.json()) as T;
+		} else {
+			const errorResponse = await response.json();
+			const customError = new CustomError({
+				errorResponse,
+			});
+
+			throw customError;
+		}
 	}
 
-	static post<T = Object>({ url, body }: { url: string; body: Object }) {
-		const removedFalsyBody = UtilObject.removeFalsy(body);
-		const postUrl = this.generateNexturl({ url });
+	static get<T>({ ...getProps }: Omit<ApiDetail, "body">) {
+		return this.defaultFetch<T>({ ...getProps, method: "GET" });
+	}
 
-		return this.defaultFetch<T>({
-			url: postUrl,
-			method: "POST",
-			body: JSON.stringify(removedFalsyBody),
-		});
+	static post<T = Object>({ ...postProps }: ApiDetail) {
+		return this.defaultFetch<T>({ ...postProps, method: "POST" });
+	}
+
+	static put<T = Object>({ ...putProps }: ApiDetail) {
+		return this.defaultFetch<T>({ ...putProps, method: "PUT" });
+	}
+
+	static delete<T = Object>({ ...deleteProps }: ApiDetail) {
+		return this.defaultFetch<T>({ ...deleteProps, method: "DELETE" });
 	}
 }
 
