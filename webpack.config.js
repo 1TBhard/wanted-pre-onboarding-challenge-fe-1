@@ -15,7 +15,6 @@ const config = {
 		clean: true,
 	},
 	devServer: {
-		static: path.join(__dirname, "dist"),
 		open: true,
 		host: "localhost",
 		port: process.env.PORT || 8080,
@@ -50,6 +49,7 @@ const config = {
 			src: path.resolve(__dirname, "src"),
 			public: path.resolve(__dirname, "public"),
 		},
+		modules: [path.resolve(__dirname), "node_modules"],
 		extensions: [".tsx", ".ts", ".jsx", ".js", "..."],
 	},
 };

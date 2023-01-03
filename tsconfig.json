@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"moduleResolution": "Node",
 		"allowSyntheticDefaultImports": true,
 		// any 타입으로 추론될 때 error
 		"noImplicitAny": true,
@@ -12,8 +13,8 @@
 		"paths": {
 			"src/*": ["./src/*"],
 			"public/*": ["./public/*"]
-		}
-		// "typeRoots": ["./node_modules/@types", "./src/@types"]
+		},
+		"typeRoots": ["./node_modules/@types", "./src/@types"]
 	},
 	"include": ["./src", "public/testFolder", "src/index.tsx"],
 	"exclude": ["./node_modules", "./dist", "./public"]
