@@ -2,13 +2,17 @@ import UtilApi from "src/utils/UtilApi";
 
 const LOCAL_STORAGE_TOKEN_KEY = "token";
 
-class Token {
-	private token: string;
+export class Token {
+	private token: string | null;
 
 	constructor() {
 		const localStroageToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
 
 		this.token = localStroageToken ?? "";
+	}
+
+	isEmpty() {
+		return this.token == null;
 	}
 
 	getToken() {
@@ -25,7 +29,8 @@ class Token {
 	}
 
 	removeToken() {
-		this.token = "";
+		this.token = null;
+		localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
 	}
 }
 
