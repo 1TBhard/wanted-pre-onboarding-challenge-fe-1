@@ -1,4 +1,5 @@
 import { FormEventHandler, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import postSignUp from "src/api/auth/postSignUp";
 import { Button } from "src/components/Button";
 import { LabelInput } from "src/components/LabelInput";
@@ -11,7 +12,9 @@ interface SignUpForm {
 	password?: string;
 }
 
-export const SignUp = () => {
+export const SignUpPage = () => {
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [errorState, setErrorState] = useState<SignUpForm>();
@@ -60,6 +63,8 @@ export const SignUp = () => {
 				email,
 				password,
 			});
+
+			navigate("/login");
 		} catch (error) {
 			alert(error.message);
 		}

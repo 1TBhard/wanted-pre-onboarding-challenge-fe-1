@@ -1,50 +1,32 @@
-import UtilObject from "src/utils/UtilObject";
+import postLogin from "src/api/auth/postLogin";
 import { Button } from "src/components/Button";
 import { FORM_ID } from "src/constants/FORM_ID";
 import { FormEventHandler, useState } from "react";
 import { LabelInput } from "src/components/LabelInput";
 import { MainLayout } from "src/components/MainLayout";
-import postLogin from "src/api/auth/postLogin";
+import token from "src/utils/Token";
+import { Navigate, useNavigate } from "react-router-dom";
 
-interface SignUpForm {
-	email: string;
-	password: string;
-}
+export const LoginPage = () => {
+	const navigate = useNavigate();
 
-export const SignIn = () => {
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState("");
-	const [errorState, setErrorState] = useState<SignUpForm>({
-		email: "",
-		password: "",
-	});
-
-	const validate = (): boolean => {
-		const nextErrorState = {};
-
-		if (UtilObject.isEmpty(nextErrorState)) {
-			return true;
-		} else {
-			return false;
-		}
-	};
 
 	const onSubmit: FormEventHandler<HTMLElement> = async (e) => {
 		e.preventDefault();
 
-		if (!validate()) {
-			return;
-		}
-
 		try {
-			await postLogin({
+			const { token: responseToken } = await postLogin({
 				email,
 				password,
 			});
+
+			token.setToken(responseToken);
+			navigate("/todo", { replace: true });
 		} catch (error) {
 			const message = error.message;
 
-			// TODO - 에러 modal 만들기
 			alert(message);
 		}
 	};
@@ -60,7 +42,6 @@ export const SignIn = () => {
 					onChange={(e) => {
 						setEmail(e.target.value);
 					}}
-					error={errorState["email"]}
 				/>
 
 				<LabelInput
@@ -71,7 +52,6 @@ export const SignIn = () => {
 					onChange={(e) => {
 						setPassword(e.target.value);
 					}}
-					error={errorState["password"]}
 				/>
 
 				<Button
