@@ -4,7 +4,10 @@ interface ObjectType {
 
 class UtilObject {
 	static isEmpty(obj: ObjectType) {
-		return Object.keys(obj).length === 0;
+		return (
+			Object.keys(obj).length === 0 &&
+			Object.getPrototypeOf(obj) === Object.prototype
+		);
 	}
 
 	static removeFalsy(params?: any) {
