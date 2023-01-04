@@ -1,11 +1,12 @@
-import { FormEventHandler, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import postSignUp from "src/api/auth/postSignUp";
+import UtilObject from "src/utils/UtilObject";
 import { Button } from "src/components/Button";
+import { FlexBox } from "src/components/FlexBox";
+import { FORM_ID } from "src/constants/FORM_ID";
+import { FormEventHandler, useState } from "react";
 import { LabelInput } from "src/components/LabelInput";
 import { MainLayout } from "src/components/MainLayout";
-import { FORM_ID } from "src/constants/FORM_ID";
-import UtilObject from "src/utils/UtilObject";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpForm {
 	email?: string;
@@ -97,11 +98,13 @@ export const SignUpPage = () => {
 					error={errorState?.password}
 				/>
 
-				<Button
-					disabled={!(email && password && UtilObject.isEmpty(errorState))}
-					label='가입'
-					buttonProp={{ type: "submit" }}
-				/>
+				<FlexBox justifyContent='center'>
+					<Button
+						disabled={!(email && password && UtilObject.isEmpty(errorState))}
+						label='가입'
+						buttonProp={{ type: "submit" }}
+					/>
+				</FlexBox>
 			</form>
 		</MainLayout>
 	);

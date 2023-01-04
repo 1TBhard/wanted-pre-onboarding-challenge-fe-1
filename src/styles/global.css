@@ -53,3 +53,7 @@ main {
 	color: red;
 	font-size: 20px;
 }
+
+.selected__todo {
+	background-color: #457b9d;
+}
