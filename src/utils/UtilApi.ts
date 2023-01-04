@@ -62,6 +62,11 @@ class UtilApi {
 				errorResponse,
 			});
 
+			// 토큰 없는 에러 발생시 home으로 리다이렉트
+			if (customError.message === "Token is missing") {
+				window.location.replace("/");
+			}
+
 			throw customError;
 		}
 	}
