@@ -7,6 +7,7 @@ export const FlexBox = ({
 	justifyContent = "initial",
 	alignItems = "center",
 	gap = "10px",
+	width,
 }: {
 	className?: string;
 	children: ReactNode;
@@ -14,6 +15,7 @@ export const FlexBox = ({
 	justifyContent?: CSSProperties["justifyContent"];
 	alignItems?: CSSProperties["alignItems"];
 	gap?: CSSProperties["gap"];
+	width?: CSSProperties["width"];
 }) => {
 	return (
 		<div
@@ -24,6 +26,7 @@ export const FlexBox = ({
 				justifyContent,
 				alignItems,
 				gap,
+				width,
 			}}
 		>
 			{children}
