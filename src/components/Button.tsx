@@ -1,4 +1,6 @@
 import { ButtonHTMLAttributes, CSSProperties } from "react";
+import debounce from "src/utils/debounce";
+import UtilObject from "src/utils/UtilObject";
 
 export const Button = ({
 	label,
@@ -11,12 +13,17 @@ export const Button = ({
 	disabled?: boolean;
 	buttonProp?: ButtonHTMLAttributes<HTMLButtonElement>;
 }) => {
+	const onClick = buttonProp.onClick
+		? () => debounce(buttonProp.onClick)
+		: null;
+	const nextButtonProps = UtilObject.removeFalsy({ ...buttonProp, onClick });
+
 	return (
 		<div>
 			<button
 				disabled={disabled}
 				className={`normal-btn ${disabled ? "normal-btn__no-active" : ""}`}
-				{...buttonProp}
+				{...nextButtonProps}
 				style={{ ...style }}
 			>
 				{label}
