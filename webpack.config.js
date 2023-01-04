@@ -1,8 +1,13 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require("dotenv-webpack");
 
 const isProduction = process.env.NODE_ENV == "production";
+
+// const dotenvPath = isProduction
+// 	? path.join(__dirname, ".env")
+// 	: path.join(__dirname, ".env.dev");
 
 const stylesHandler = isProduction
 	? MiniCssExtractPlugin.loader
@@ -17,12 +22,15 @@ const config = {
 	devServer: {
 		open: true,
 		host: "localhost",
-		port: process.env.PORT || 8080,
+		port: process.env.PORT,
 		historyApiFallback: true,
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: "./public/index.html",
+		}),
+		new Dotenv({
+			path: isProduction ? ".env" : ".env.dev",
 		}),
 	],
 	module: {
