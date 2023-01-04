@@ -4,10 +4,7 @@ import getTodoList, { Todo } from "src/api/todo/getTodoList";
 import postTodo from "src/api/todo/postTodo";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { Button } from "src/components/Button";
-import {
-	CURRENT_SELECTED_TODO_ID,
-	CURRENT_TODO_CONTEXT,
-} from "src/constants/LOCAL_STORAGE_KEY";
+import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
 import { DELETE_WARNING } from "src/constants/WARNING_MESSAGE";
 import { FlexBox } from "src/components/FlexBox";
 import { MainLayout } from "src/components/MainLayout";
@@ -32,7 +29,6 @@ export const TodoPage = () => {
 	};
 
 	const onClickEdit = (nextId: string) => {
-		UtilLocalStorage.set(CURRENT_SELECTED_TODO_ID, nextId);
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
 		navigate(`?selectedId=${nextId}`, {
 			relative: "route",
@@ -44,7 +40,6 @@ export const TodoPage = () => {
 		if (confirm(DELETE_WARNING)) {
 			try {
 				await deleteTodo(id);
-				UtilLocalStorage.remove(CURRENT_SELECTED_TODO_ID);
 				await fetchTodoList();
 			} catch (error) {
 				console.error(error);
@@ -57,7 +52,6 @@ export const TodoPage = () => {
 		await fetchTodoList();
 		navigate("");
 
-		UtilLocalStorage.remove(CURRENT_SELECTED_TODO_ID);
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
 	};
 
