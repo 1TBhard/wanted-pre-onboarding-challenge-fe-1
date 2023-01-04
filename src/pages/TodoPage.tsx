@@ -1,4 +1,4 @@
-import debouncer from "src/utils/debounce";
+import debounce from "src/utils/debounce";
 import deleteTodo from "src/api/todo/deleteTodo";
 import getTodoList, { Todo } from "src/api/todo/getTodoList";
 import postTodo from "src/api/todo/postTodo";
@@ -14,7 +14,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const TodoPage = () => {
 	const navigate = useNavigate();
-
 	const [todoList, setTodoList] = useState<Todo[]>();
 	const selectedId = useSearchParams()[0].get("selectedId") ?? "";
 
@@ -74,28 +73,42 @@ export const TodoPage = () => {
 		<MainLayout title='Todo 리스트'>
 			<FlexBox gap={"30px"} alignItems='start'>
 				<FlexBox flexDirection='column' justifyContent='stretch'>
-					<Button
-						label='추가'
-						buttonProp={{
-							onClick: () => debouncer(addTodoList),
-						}}
-					/>
 					{todoList?.map((todo) => (
 						<FlexBox
 							className={selectedId === todo.id ? "selected__todo" : ""}
 							key={todo.id}
+							justifyContent='space-between'
 						>
-							<p>{todo.title}</p>
-							<Button
-								label='수정'
-								buttonProp={{ onClick: () => onClickEdit(todo.id) }}
-							/>
-							<Button
-								label='삭제'
-								buttonProp={{ onClick: () => onClickDelete(todo.id) }}
-							/>
+							<p
+								style={{
+									width: "400px",
+									overflow: "hidden",
+									whiteSpace: "nowrap",
+									textOverflow: "ellipsis",
+								}}
+							>
+								{todo.title}
+							</p>
+
+							<FlexBox>
+								<Button
+									label='수정'
+									buttonProp={{ onClick: () => onClickEdit(todo.id) }}
+								/>
+								<Button
+									label='삭제'
+									buttonProp={{ onClick: () => onClickDelete(todo.id) }}
+								/>
+							</FlexBox>
 						</FlexBox>
 					))}
+					<Button
+						label='추가'
+						buttonProp={{
+							style: { width: "100%" },
+							onClick: () => debounce(addTodoList),
+						}}
+					/>
 				</FlexBox>
 
 				<FlexBox flexDirection='column'>
@@ -106,8 +119,4 @@ export const TodoPage = () => {
 			</FlexBox>
 		</MainLayout>
 	);
-};
-
-const Card = () => {
-	return <div></div>;
 };
