@@ -8,10 +8,10 @@ import { CURRENT_TODO_CONTEXT } from "../constants/LOCAL_STORAGE_KEY";
 
 interface TodoDetailProps {
 	id: string;
-	exitEdit: () => void;
+	afterExitEdit: () => void;
 }
 
-export const TodoDetail = ({ id, exitEdit }: TodoDetailProps) => {
+export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 	const [currentTitle, setCurrentTitle] = useState("");
 	const [currentContent, setCurrentContent] = useState("");
 
@@ -38,6 +38,7 @@ export const TodoDetail = ({ id, exitEdit }: TodoDetailProps) => {
 	const onClickSubmit = async () => {
 		try {
 			await putTodo({ id, title: currentTitle, content: currentContent });
+			await afterExitEdit();
 		} catch (error) {
 			console.error(error);
 			alert(error.message);
@@ -45,8 +46,7 @@ export const TodoDetail = ({ id, exitEdit }: TodoDetailProps) => {
 	};
 
 	const onClickCancel = () => {
-		exitEdit();
-		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
+		afterExitEdit();
 	};
 
 	const fetchTodo = async () => {

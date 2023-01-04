@@ -4,19 +4,22 @@ import getTodoList, { Todo } from "src/api/todo/getTodoList";
 import postTodo from "src/api/todo/postTodo";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { Button } from "src/components/Button";
-import { DELETE_WARNING, NO_SAVE_WARNING } from "src/constants/WARNING_MESSAGE";
-import { FlexBox } from "src/components/FlexBox";
-import { MainLayout } from "src/components/MainLayout";
-import { TodoDetail } from "src/components/TodoDetail";
-import { useEffect, useState } from "react";
 import {
 	CURRENT_SELECTED_TODO_ID,
 	CURRENT_TODO_CONTEXT,
 } from "src/constants/LOCAL_STORAGE_KEY";
+import { DELETE_WARNING } from "src/constants/WARNING_MESSAGE";
+import { FlexBox } from "src/components/FlexBox";
+import { MainLayout } from "src/components/MainLayout";
+import { TodoDetail } from "src/components/TodoDetail";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const TodoPage = () => {
+	const navigate = useNavigate();
+
 	const [todoList, setTodoList] = useState<Todo[]>();
-	const [selectedId, setSelectedId] = useState<string>();
+	const selectedId = useSearchParams()[0].get("selectedId") ?? "";
 
 	const addTodoList = async () => {
 		try {
@@ -29,17 +32,16 @@ export const TodoPage = () => {
 	};
 
 	const onClickEdit = (nextId: string) => {
-		setSelectedId(nextId);
 		UtilLocalStorage.set(CURRENT_SELECTED_TODO_ID, nextId);
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
+		navigate(`?selectedId=${nextId}`, {
+			relative: "route",
+			preventScrollReset: true,
+		});
 	};
 
 	const onClickDelete = async (id: string) => {
 		if (confirm(DELETE_WARNING)) {
-			if (selectedId === id) {
-				setSelectedId(() => undefined);
-			}
-
 			try {
 				await deleteTodo(id);
 				UtilLocalStorage.remove(CURRENT_SELECTED_TODO_ID);
@@ -51,8 +53,10 @@ export const TodoPage = () => {
 		}
 	};
 
-	const exitEdit = () => {
-		setSelectedId(() => undefined);
+	const afterExitEdit = async () => {
+		await fetchTodoList();
+		navigate("");
+
 		UtilLocalStorage.remove(CURRENT_SELECTED_TODO_ID);
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
 	};
@@ -69,12 +73,6 @@ export const TodoPage = () => {
 	};
 
 	useEffect(() => {
-		const initSelectedId = UtilLocalStorage.get(CURRENT_SELECTED_TODO_ID);
-
-		if (initSelectedId) {
-			setSelectedId(initSelectedId);
-		}
-
 		fetchTodoList();
 	}, []);
 
@@ -107,7 +105,9 @@ export const TodoPage = () => {
 				</FlexBox>
 
 				<FlexBox flexDirection='column'>
-					{selectedId && <TodoDetail id={selectedId} exitEdit={exitEdit} />}
+					{selectedId && (
+						<TodoDetail id={selectedId} afterExitEdit={afterExitEdit} />
+					)}
 				</FlexBox>
 			</FlexBox>
 		</MainLayout>
