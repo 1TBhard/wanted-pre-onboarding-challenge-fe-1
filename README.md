@@ -64,6 +64,16 @@ src
 
 <br/>
 
+## 로그인 페이지
+
+<p align="center">
+  <img src="./readmeDes/login.png" />
+</p>
+
+- 로그인 실패시 `alert()`로 사용자에게 알립니다.
+
+<br/>
+
 ## Todo 리스트 페이지
 
 <p align="center">
