@@ -1,4 +1,4 @@
-# 🚀 원티드 2023-01 프론트엔드 프리온보딩 챌린지
+# 🚀 원티드 2023-01 프리온보딩 챌린지 프론트엔드 코스 사전과제
 
 <p align="center">
   <img src="./readmeDes/wanted-pre-onboarding-challenge-fe.png" />
