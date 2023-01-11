@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, CSSProperties } from "react";
+import * as Style from "./Button.style";
 
 type ButtonType = "primary" | "ghost" | "warning";
 
@@ -15,7 +16,7 @@ export const Button = ({
 	label,
 	style,
 	disabled = false,
-	type,
+	type = "primary",
 	...restButtonProps
 }: ButtonProps) => {
 	// const debouceWrappedOnClick = restButtonProps?.onClick
@@ -23,15 +24,15 @@ export const Button = ({
 	// 	: null;
 
 	return (
-		<div>
-			<button
+		<Style.Frame>
+			<Style.Body
 				disabled={disabled}
-				className={`normal-btn ${disabled ? "normal-btn__no-active" : ""}`}
+				// className={`normal-btn ${disabled ? "normal-btn__no-active" : ""}`}
 				// onClick={debouceWrappedOnClick}
 				{...restButtonProps}
 			>
 				{label}
-			</button>
-		</div>
+			</Style.Body>
+		</Style.Frame>
 	);
 };
