@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { FlexBox } from "src/components/FlexBox";
+import { FlexBox } from "src/components/common/FlexBox";
 
 export const MainLayout = ({
 	title,

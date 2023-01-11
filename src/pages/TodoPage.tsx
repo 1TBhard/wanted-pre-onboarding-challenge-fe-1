@@ -3,12 +3,12 @@ import deleteTodo from "src/api/todo/deleteTodo";
 import getTodoList, { Todo } from "src/api/todo/getTodoList";
 import postTodo from "src/api/todo/postTodo";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
-import { Button } from "src/components/Button";
+import { Button } from "src/components/common/Button";
 import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
 import { DELETE_WARNING } from "src/constants/WARNING_MESSAGE";
-import { FlexBox } from "src/components/FlexBox";
-import { MainLayout } from "src/components/MainLayout";
-import { TodoDetail } from "src/components/TodoDetail";
+import { FlexBox } from "src/components/common/FlexBox";
+import { MainLayout } from "src/components/common/MainLayout";
+import { TodoDetail } from "src/components/main/TodoDetail";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -91,23 +91,15 @@ export const TodoPage = () => {
 							</p>
 
 							<FlexBox>
-								<Button
-									label='수정'
-									buttonProp={{ onClick: () => onClickEdit(todo.id) }}
-								/>
-								<Button
-									label='삭제'
-									buttonProp={{ onClick: () => onClickDelete(todo.id) }}
-								/>
+								<Button label='수정' onClick={() => onClickEdit(todo.id)} />
+								<Button label='삭제' onClick={() => onClickDelete(todo.id)} />
 							</FlexBox>
 						</FlexBox>
 					))}
 					<Button
 						label='추가'
-						buttonProp={{
-							style: { width: "100%" },
-							onClick: () => debounce(addTodoList),
-						}}
+						style={{ width: "100%" }}
+						onClick={() => debounce(addTodoList)}
 					/>
 				</FlexBox>
 

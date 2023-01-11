@@ -1,11 +1,11 @@
 import postLogin from "src/api/auth/postLogin";
 import token from "src/utils/Token";
-import { Button } from "src/components/Button";
-import { FlexBox } from "src/components/FlexBox";
+import { Button } from "src/components/common/Button";
+import { FlexBox } from "src/components/common/FlexBox";
 import { FORM_ID } from "src/constants/FORM_ID";
 import { FormEventHandler, useState } from "react";
-import { LabelInput } from "src/components/LabelInput";
-import { MainLayout } from "src/components/MainLayout";
+import { LabelInput } from "src/components/common/LabelInput";
+import { MainLayout } from "src/components/common/MainLayout";
 import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
@@ -59,7 +59,7 @@ export const LoginPage = () => {
 					<Button
 						disabled={!(email && password)}
 						label='로그인'
-						buttonProp={{ type: "submit" }}
+						htmlType='submit'
 					/>
 				</FlexBox>
 			</form>

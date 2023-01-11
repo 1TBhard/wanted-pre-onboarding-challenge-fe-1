@@ -1,8 +1,8 @@
-import AuthProvider from "src/components/AuthProvider";
+import AuthProvider from "src/components/main/AuthProvider";
 import Pages from "src/pages";
 import token from "src/utils/Token";
 import { BrowserRouter, Link, useNavigate } from "react-router-dom";
-import { FlexBox } from "src/components/FlexBox";
+import { FlexBox } from "src/components/common/FlexBox";
 import "src/styles/global.css";
 
 export const App = () => {

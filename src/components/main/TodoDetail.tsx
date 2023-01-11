@@ -1,10 +1,10 @@
 import getTodo from "src/api/todo/getTodo";
 import putTodo from "src/api/todo/putTodo";
-import { Button } from "src/components/Button";
+import { Button } from "src/components/common/Button";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { FlexBox } from "src/components/FlexBox";
+import { FlexBox } from "src/components/common/FlexBox";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
-import { CURRENT_TODO_CONTEXT } from "../constants/LOCAL_STORAGE_KEY";
+import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
 
 interface TodoDetailProps {
 	id: string;
@@ -81,8 +81,8 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 			justifyContent='start'
 		>
 			<FlexBox justifyContent={"flex-end"}>
-				<Button label='제출' buttonProp={{ onClick: onClickSubmit }} />
-				<Button label='취소' buttonProp={{ onClick: onClickCancel }} />
+				<Button label='제출' onClick={onClickSubmit} />
+				<Button label='취소' onClick={onClickCancel} />
 			</FlexBox>
 
 			<article>

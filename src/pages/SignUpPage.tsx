@@ -1,11 +1,11 @@
 import postSignUp from "src/api/auth/postSignUp";
 import UtilObject from "src/utils/UtilObject";
-import { Button } from "src/components/Button";
-import { FlexBox } from "src/components/FlexBox";
+import { Button } from "src/components/common/Button";
+import { FlexBox } from "src/components/common/FlexBox";
 import { FORM_ID } from "src/constants/FORM_ID";
 import { FormEventHandler, useState } from "react";
-import { LabelInput } from "src/components/LabelInput";
-import { MainLayout } from "src/components/MainLayout";
+import { LabelInput } from "src/components/common/LabelInput";
+import { MainLayout } from "src/components/common/MainLayout";
 import { useNavigate } from "react-router-dom";
 
 interface SignUpForm {
@@ -102,7 +102,7 @@ export const SignUpPage = () => {
 					<Button
 						disabled={!(email && password && UtilObject.isEmpty(errorState))}
 						label='가입'
-						buttonProp={{ type: "submit" }}
+						htmlType='submit'
 					/>
 				</FlexBox>
 			</form>

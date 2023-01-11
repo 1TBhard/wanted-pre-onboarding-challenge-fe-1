@@ -1,4 +1,4 @@
-import { AuthContext } from "src/components/AuthProvider";
+import { AuthContext } from "src/components/main/AuthProvider";
 import { LoginPage } from "src/pages/LoginPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ReactNode } from "react";
