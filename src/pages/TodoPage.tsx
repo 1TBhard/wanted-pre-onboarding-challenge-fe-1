@@ -70,7 +70,7 @@ export const TodoPage = () => {
 	}, []);
 
 	return (
-		<MainLayout title='Todo 리스트'>
+		<MainLayout>
 			<FlexBox gap={"30px"} alignItems='start'>
 				<FlexBox flexDirection='column' justifyContent='stretch'>
 					{todoList?.map((todo) => (
