@@ -1,9 +1,9 @@
 import { AuthContext } from "src/components/main/AuthProvider";
-import { LoginPage } from "src/pages/LoginPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ReactNode } from "react";
-import { SignUpPage } from "src/pages/SignUpPage";
+import { SignUpPage } from "src/pages/SignUpPage/SignUpPage";
 import { TodoPage } from "src/pages/TodoPage";
+import { LoginPage } from "src/pages/LoginPage/LoginPage";
 
 const AuthProtect = ({ children }: { children: ReactNode }) => {
 	return (
