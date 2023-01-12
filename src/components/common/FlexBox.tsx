@@ -8,6 +8,7 @@ export const FlexBox = ({
 	alignItems = "center",
 	gap = "10px",
 	width,
+	height,
 }: {
 	className?: string;
 	children: ReactNode;
@@ -16,6 +17,7 @@ export const FlexBox = ({
 	alignItems?: CSSProperties["alignItems"];
 	gap?: CSSProperties["gap"];
 	width?: CSSProperties["width"];
+	height?: CSSProperties["height"];
 }) => {
 	return (
 		<div
@@ -27,6 +29,7 @@ export const FlexBox = ({
 				alignItems,
 				gap,
 				width,
+				height,
 			}}
 		>
 			{children}
