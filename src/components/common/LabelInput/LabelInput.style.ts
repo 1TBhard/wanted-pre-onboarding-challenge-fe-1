@@ -5,19 +5,21 @@ export const Frame = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	width: 500px;
 `;
 
 export const Body = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	gap: 40px;
 `;
 
-export const Label = styled.label``;
+export const Label = styled.label`
+	width: 150px;
+`;
 
 export const Input = styled.input`
-	width: 300px;
+	width: 100%;
 `;
 
 export const Error = styled.div`
