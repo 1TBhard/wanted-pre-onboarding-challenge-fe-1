@@ -6,7 +6,8 @@ import { FORM_ID } from "src/constants/FORM_ID";
 import { FormEventHandler, useState } from "react";
 import { LabelInput } from "src/components/common/LabelInput";
 import { MainLayout } from "src/components/common/MainLayout";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
+import * as Styled from "./SignUpPage.style";
 
 interface SignUpForm {
 	email?: string;
@@ -72,40 +73,43 @@ export const SignUpPage = () => {
 	};
 
 	return (
-		<MainLayout title='회원가입'>
-			<form id={FORM_ID.SIGN_UP} onSubmit={onSubmit}>
-				<LabelInput
-					label='이메일'
-					name='email'
-					type='text'
-					value={email}
-					onChange={(e) => {
-						setEmail(e.target.value);
-						validateEmail(e.target.value);
-					}}
-					error={errorState?.email}
-				/>
+		<MainLayout>
+			<FlexBox height={"100%"} flexDirection='column' justifyContent={"center"}>
+				<Styled.Form id={FORM_ID.SIGN_UP} onSubmit={onSubmit}>
+					<FlexBox justifyContent={"center"} flexDirection='column'>
+						<Styled.Title>회원가입</Styled.Title>
 
-				<LabelInput
-					label='비밀번호'
-					name='password'
-					type='password'
-					value={password}
-					onChange={(e) => {
-						setPassword(e.target.value);
-						validatePassword(e.target.value);
-					}}
-					error={errorState?.password}
-				/>
-
-				<FlexBox justifyContent='center'>
-					<Button
-						disabled={!(email && password && UtilObject.isEmpty(errorState))}
-						label='가입'
-						htmlType='submit'
-					/>
-				</FlexBox>
-			</form>
+						<LabelInput
+							label='이메일'
+							name='email'
+							type='text'
+							value={email}
+							onChange={(e) => {
+								setEmail(e.target.value);
+								validateEmail(e.target.value);
+							}}
+							error={errorState?.email}
+						/>
+						<LabelInput
+							label='비밀번호'
+							name='password'
+							type='password'
+							value={password}
+							onChange={(e) => {
+								setPassword(e.target.value);
+								validatePassword(e.target.value);
+							}}
+							error={errorState?.password}
+						/>
+						<Button
+							disabled={!(email && password && UtilObject.isEmpty(errorState))}
+							label='가입'
+							type='submit'
+							width={"100%"}
+						/>
+					</FlexBox>
+				</Styled.Form>
+			</FlexBox>
 		</MainLayout>
 	);
 };
