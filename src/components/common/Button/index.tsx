@@ -19,17 +19,11 @@ export const Button = ({
 	width,
 	...restButtonProps
 }: ButtonProps) => {
-	// const debouceWrappedOnClick = restButtonProps?.onClick
-	// 	? debounce(restButtonProps.onClick)
-	// 	: null;
-
 	return (
 		<Style.Body
 			width={width}
 			disabled={disabled}
 			colorType={colorType}
-			// className={`normal-btn ${disabled ? "normal-btn__no-active" : ""}`}
-			// onClick={debouceWrappedOnClick}
 			{...restButtonProps}
 		>
 			{label}
