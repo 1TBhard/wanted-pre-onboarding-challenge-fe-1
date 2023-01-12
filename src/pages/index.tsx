@@ -8,7 +8,13 @@ import { LoginPage } from "src/pages/LoginPage/LoginPage";
 const AuthProtect = ({ children }: { children: ReactNode }) => {
 	return (
 		<AuthContext.Consumer>
-			{(token) => (token.getToken() ? children : <Navigate to={"/"} replace />)}
+			{(token) =>
+				token.getToken()
+					? children
+					: (confirm("로그인이 필요합니다.") || true) && (
+							<Navigate to={"/"} replace />
+					  )
+			}
 		</AuthContext.Consumer>
 	);
 };
