@@ -1,11 +1,9 @@
-import deleteTodo from "src/api/todo/deleteTodo";
 import getTodoList from "src/api/todo/getTodoList";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
-import { DELETE_WARNING } from "src/constants/WARNING_MESSAGE";
 import { FlexBox } from "src/components/common/FlexBox";
 import { MainLayout } from "src/components/common/MainLayout";
-import { Todo } from "src/api/todo/getTodo";
+import getTodo, { Todo } from "src/api/todo/getTodo";
 import { TodoDetail } from "src/components/main/TodoDetail";
 import { TodoListMenu } from "src/components/main/TodoListMenu";
 import { useEffect, useState } from "react";
@@ -15,6 +13,7 @@ export const TodoPage = () => {
 	const navigate = useNavigate();
 	const [todoList, setTodoList] = useState<Todo[]>();
 	const selectedId = useSearchParams()[0].get("selectedId") ?? "";
+	const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
 	const onClickTodoDetail = (nextId: string) => {
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
@@ -22,18 +21,6 @@ export const TodoPage = () => {
 			relative: "route",
 			preventScrollReset: true,
 		});
-	};
-
-	const onClickDelete = async (id: string) => {
-		if (confirm(DELETE_WARNING)) {
-			try {
-				await deleteTodo(id);
-				await fetchTodoList();
-			} catch (error) {
-				console.error(error);
-				alert(error.message);
-			}
-		}
 	};
 
 	const afterExitEdit = async () => {
@@ -52,9 +39,25 @@ export const TodoPage = () => {
 		}
 	};
 
+	const fetchTodo = async () => {
+		if (!selectedId) return;
+
+		try {
+			const { data: originTodo } = await getTodo(selectedId);
+			setSelectedTodo(originTodo);
+		} catch (error) {
+			alert(error.message);
+			window.history.back();
+		}
+	};
+
 	useEffect(() => {
 		fetchTodoList();
 	}, []);
+
+	useEffect(() => {
+		fetchTodo();
+	}, [selectedId]);
 
 	return (
 		<MainLayout>
@@ -62,13 +65,12 @@ export const TodoPage = () => {
 				<TodoListMenu
 					todoList={todoList}
 					onClickTodoDetail={onClickTodoDetail}
+					afterAddTodo={fetchTodoList}
 				/>
 
-				{/* <FlexBox flexDirection='column'> */}
-				{selectedId && (
-					<TodoDetail id={selectedId} afterExitEdit={afterExitEdit} />
+				{selectedTodo && (
+					<TodoDetail {...selectedTodo} afterExitEdit={afterExitEdit} />
 				)}
-				{/* </FlexBox> */}
 			</FlexBox>
 		</MainLayout>
 	);

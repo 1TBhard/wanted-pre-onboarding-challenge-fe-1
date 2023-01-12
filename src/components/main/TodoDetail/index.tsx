@@ -1,4 +1,4 @@
-import getTodo from "src/api/todo/getTodo";
+import getTodo, { Todo } from "src/api/todo/getTodo";
 import putTodo from "src/api/todo/putTodo";
 import { Button } from "src/components/common/Button";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -8,15 +8,29 @@ import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
 import * as Styled from "./TodoDetail.style";
 import { LabelInput } from "src/components/common/LabelInput";
 import { LabelTextArea } from "src/components/common/LabelTextarea";
+import {
+	DELETE_WARNING,
+	PLEASE_INPUT_TITLE,
+} from "src/constants/WARNING_MESSAGE";
+import deleteTodo from "src/api/todo/deleteTodo";
+import { useNavigate } from "react-router-dom";
 
-interface TodoDetailProps {
-	id: string;
+interface TodoDetailProps extends Todo {
 	afterExitEdit: () => void;
 }
 
-export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
+export const TodoDetail = ({
+	id,
+	afterExitEdit,
+	title: originTitle,
+	content: originContent,
+}: TodoDetailProps) => {
+	const navigate = useNavigate();
 	const [currentTitle, setCurrentTitle] = useState("");
 	const [currentContent, setCurrentContent] = useState("");
+
+	const isSameOrigin =
+		originTitle === currentTitle && originContent === currentContent;
 
 	const onChangeTitle: ChangeEventHandler<HTMLInputElement> = (e) => {
 		const nextTitle = e.target.value;
@@ -41,6 +55,7 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 	const onClickSubmit = async () => {
 		try {
 			await putTodo({ id, title: currentTitle, content: currentContent });
+			alert("수정되었습니다.");
 			await afterExitEdit();
 		} catch (error) {
 			console.error(error);
@@ -48,14 +63,16 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 		}
 	};
 
-	const fetchTodo = async () => {
-		try {
-			const { data: originTodo } = await getTodo(id);
-
-			setCurrentTitle(originTodo.title);
-			setCurrentContent(originTodo.content);
-		} catch (error) {
-			console.error(error);
+	const onClickDelete = async () => {
+		if (confirm(DELETE_WARNING)) {
+			try {
+				await deleteTodo(id);
+				await afterExitEdit();
+				navigate("/todo", { replace: true });
+			} catch (error) {
+				console.error(error);
+				alert(error.message);
+			}
 		}
 	};
 
@@ -65,25 +82,27 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 			content: string;
 		}>(CURRENT_TODO_CONTEXT);
 
-		if (!initContent) {
-			fetchTodo();
-		} else {
+		if (initContent) {
 			setCurrentContent(initContent.content);
 			setCurrentTitle(initContent.title);
+		} else {
+			setCurrentTitle(originTitle);
+			setCurrentContent(originContent);
 		}
-	}, [id]);
+	}, [id, originTitle, originContent]);
 
 	return (
 		<Styled.Frame>
 			<FlexBox justifyContent={"flex-end"}>
-				<Button label='수정' onClick={onClickSubmit} />
-				{/* <Button label='취소' onClick={onClickCancel} /> */}
+				<Button label='수정' disabled={isSameOrigin} onClick={onClickSubmit} />
+				<Button label='삭제' colorType='warning' onClick={onClickDelete} />
 			</FlexBox>
 
 			<Styled.Article>
 				<FlexBox flexDirection='column' alignItems={"stretch"}>
 					<LabelInput
 						label='제목'
+						placeholder={PLEASE_INPUT_TITLE}
 						name='todo-title'
 						type={"text"}
 						value={currentTitle}

@@ -8,11 +8,13 @@ import { useState } from "react";
 interface TodoListMenuProps {
 	todoList?: Todo[];
 	onClickTodoDetail: (nextId: string) => void;
+	afterAddTodo: () => Promise<void>;
 }
 
 export const TodoListMenu = ({
 	todoList,
 	onClickTodoDetail,
+	afterAddTodo,
 }: TodoListMenuProps) => {
 	const [isShowModal, setIsShowModal] = useState(false);
 	const onClickAddTodo = () => {
@@ -40,7 +42,11 @@ export const TodoListMenu = ({
 					<Button label='추가' width={"100%"} onClick={onClickAddTodo} />
 				</FlexBox>
 			</Styled.Frame>
-			<PostModal isShow={isShowModal} hideModal={hideModal} />
+			<PostModal
+				isShow={isShowModal}
+				hideModal={hideModal}
+				afterAddTodo={afterAddTodo}
+			/>
 		</>
 	);
 };

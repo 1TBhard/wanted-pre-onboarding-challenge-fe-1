@@ -6,24 +6,44 @@ import { FlexBox } from "src/components/common/FlexBox";
 import { LabelInput, LabelInputProps } from "src/components/common/LabelInput";
 import { LabelTextArea } from "src/components/common/LabelTextarea";
 import { useState } from "react";
+import { PLEASE_INPUT_TITLE } from "src/constants/WARNING_MESSAGE";
+import UtilObject from "src/utils/UtilObject";
 
 interface PostModalProps extends Pick<ModalProps, "isShow"> {
 	hideModal: () => void;
+	afterAddTodo: () => Promise<void>;
 }
 
-export const PostModal = ({ isShow, hideModal }: PostModalProps) => {
+export const PostModal = ({
+	isShow,
+	afterAddTodo,
+	hideModal,
+}: PostModalProps) => {
 	const [title, setTitle] = useState("");
 	const [detail, setDetail] = useState("");
+	const [error, setError] = useState<{ title?: string; detail?: string }>({});
+
+	const isValidate = () => {
+		return title && UtilObject.isEmpty(UtilObject.removeFalsy(error));
+	};
 
 	const onClickCancel = () => {
 		setTitle("");
 		setDetail("");
+		setError({});
 		hideModal();
 	};
 
 	const onClickOk = async () => {
+		if (!isValidate()) {
+			alert("조건에 맞게 입력해주세요.");
+			return;
+		}
+
 		try {
 			await postTodo({ content: detail, title });
+			await afterAddTodo();
+			hideModal();
 		} catch (error) {
 			console.error(error);
 			alert(error.message);
@@ -31,11 +51,19 @@ export const PostModal = ({ isShow, hideModal }: PostModalProps) => {
 	};
 
 	const onChangeTitle: LabelInputProps["onChange"] = (e) => {
-		setTitle(e.target.value);
+		const nextTitle = e.target.value;
+
+		setTitle(nextTitle);
+		if (!nextTitle) {
+			setError((prev) => ({ ...prev, title: PLEASE_INPUT_TITLE }));
+		} else {
+			setError((prev) => ({ detail: prev.detail }));
+		}
 	};
 
 	const onChangeDetail: LabelInputProps["onChange"] = (e) => {
-		setDetail(e.target.value);
+		const nextDetail = e.target.value;
+		setDetail(nextDetail);
 	};
 
 	return (
@@ -47,16 +75,19 @@ export const PostModal = ({ isShow, hideModal }: PostModalProps) => {
 			<Styled.ModalForm>
 				<LabelInput
 					label='제목'
+					placeholder={PLEASE_INPUT_TITLE}
 					name='todo-title'
 					type={"text"}
 					value={title}
 					onChange={onChangeTitle}
+					error={error["title"]}
 				/>
 				<LabelTextArea
 					label='상세'
 					name='todo-detail'
 					value={detail}
 					onChange={onChangeDetail}
+					error={error["detail"]}
 				/>
 			</Styled.ModalForm>
 
