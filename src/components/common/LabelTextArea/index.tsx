@@ -16,7 +16,7 @@ export const LabelTextArea = ({
 		<Styled.Frame>
 			<Styled.Body>
 				<Styled.Label htmlFor={name}>{label}</Styled.Label>
-				<Styled.TextArea name={name} {...restProps} />
+				<Styled.Textarea name={name} {...restProps} />
 			</Styled.Body>
 			<Styled.Error>{error}</Styled.Error>
 		</Styled.Frame>
