@@ -1,31 +1,31 @@
-import getTodo, { Todo } from "src/api/todo/getTodo";
+import * as Styled from "./TodoDetail.style";
+import deleteTodo from "src/api/todo/deleteTodo";
 import putTodo from "src/api/todo/putTodo";
+import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { Button } from "src/components/common/Button";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { FlexBox } from "src/components/common/FlexBox";
-import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
-import * as Styled from "./TodoDetail.style";
-import { LabelInput } from "src/components/common/LabelInput";
-import { LabelTextArea } from "src/components/common/LabelTextarea";
 import {
 	DELETE_WARNING,
 	PLEASE_INPUT_TITLE,
 } from "src/constants/WARNING_MESSAGE";
-import deleteTodo from "src/api/todo/deleteTodo";
-import { useNavigate } from "react-router-dom";
+import { FlexBox } from "src/components/common/FlexBox";
+import { LabelInput } from "src/components/common/LabelInput";
+import { LabelTextArea } from "src/components/common/LabelTextarea";
+import { Todo } from "src/api/todo/getTodo";
 
 interface TodoDetailProps extends Todo {
 	afterExitEdit: () => void;
+	afterDelete: () => void;
 }
 
 export const TodoDetail = ({
 	id,
 	afterExitEdit,
+	afterDelete,
 	title: originTitle,
 	content: originContent,
 }: TodoDetailProps) => {
-	const navigate = useNavigate();
 	const [currentTitle, setCurrentTitle] = useState("");
 	const [currentContent, setCurrentContent] = useState("");
 
@@ -67,8 +67,7 @@ export const TodoDetail = ({
 		if (confirm(DELETE_WARNING)) {
 			try {
 				await deleteTodo(id);
-				await afterExitEdit();
-				navigate("/todo", { replace: true });
+				await afterDelete();
 			} catch (error) {
 				console.error(error);
 				alert(error.message);

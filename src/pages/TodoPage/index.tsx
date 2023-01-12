@@ -24,8 +24,15 @@ export const TodoPage = () => {
 	};
 
 	const afterExitEdit = async () => {
-		await fetchTodoList();
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
+		await fetchTodo();
+		await fetchTodoList();
+	};
+
+	const afterDelete = async () => {
+		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
+		await fetchTodoList();
+		navigate("");
 	};
 
 	const fetchTodoList = async () => {
@@ -40,14 +47,17 @@ export const TodoPage = () => {
 	};
 
 	const fetchTodo = async () => {
-		if (!selectedId) return;
+		if (!selectedId) {
+			setSelectedTodo(undefined);
+			return;
+		}
 
 		try {
 			const { data: originTodo } = await getTodo(selectedId);
 			setSelectedTodo(originTodo);
 		} catch (error) {
 			alert(error.message);
-			window.history.back();
+			navigate("/todo", { replace: true });
 		}
 	};
 
@@ -69,7 +79,11 @@ export const TodoPage = () => {
 				/>
 
 				{selectedTodo && (
-					<TodoDetail {...selectedTodo} afterExitEdit={afterExitEdit} />
+					<TodoDetail
+						{...selectedTodo}
+						afterExitEdit={afterExitEdit}
+						afterDelete={afterDelete}
+					/>
 				)}
 			</FlexBox>
 		</MainLayout>
