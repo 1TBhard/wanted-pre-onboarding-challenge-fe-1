@@ -5,6 +5,7 @@ export interface LabelInputProps {
 	label?: string;
 	name: string;
 	value: any;
+	placeholder?: string;
 	type: HTMLInputTypeAttribute;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	error?: string;
