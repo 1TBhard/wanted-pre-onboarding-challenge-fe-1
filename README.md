@@ -34,7 +34,49 @@ yarn dev
 
 <br/>
 
-## 폴더 구조
+## 2차
+
+### 컴포넌트 구조
+
+```txt
+ExampleInput
+\_index.tsx : state와 로직이 있는 컴포넌트
+\_ExampleInput.style.ts : 스타일 관련된 styled 컴포넌트
+```
+
+### 회원가입 페이지
+
+<p align="center">
+  <img src="./readmeDes/2차_회원가입.png" />
+</p>
+
+- 스타일 변경
+
+<br/>
+
+### 로그인 페이지
+
+<p align="center">
+  <img src="./readmeDes/2차_로그인.png" />
+</p>
+
+- 스타일 변경
+
+<br/>
+
+### Todo 리스트 페이지
+
+<p align="center">
+  <img src="./readmeDes/2차_todo.png" />
+</p>
+
+- 스타일 변경
+
+---
+
+## 1차
+
+### 폴더 구조
 
 ```txt
 public
@@ -52,11 +94,12 @@ src
 
 <br/>
 
-## 회원가입 페이지
+### 회원가입 페이지
 
 <p align="center">
   <img src="./readmeDes/가입.png" />
 </p>
+
 
 - 입력한 이메일과 비밀번호가 설정된 양식에 맞지 않는 경우 오류 메시지가 나옵니다.
   - 이메일: 최소 `@`, `.` 포함
@@ -64,7 +107,7 @@ src
 
 <br/>
 
-## 로그인 페이지
+### 로그인 페이지
 
 <p align="center">
   <img src="./readmeDes/login.png" />
@@ -74,7 +117,7 @@ src
 
 <br/>
 
-## Todo 리스트 페이지
+### Todo 리스트 페이지
 
 <p align="center">
   <img src="./readmeDes/todo-list.png" />
