@@ -38,8 +38,6 @@ export const TodoPage = () => {
 
 	const afterExitEdit = async () => {
 		await fetchTodoList();
-		navigate("");
-
 		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
 	};
 
@@ -60,17 +58,17 @@ export const TodoPage = () => {
 
 	return (
 		<MainLayout>
-			<FlexBox>
+			<FlexBox gap={"50px"} alignItems='baseline'>
 				<TodoListMenu
 					todoList={todoList}
 					onClickTodoDetail={onClickTodoDetail}
 				/>
 
-				<FlexBox flexDirection='column'>
-					{selectedId && (
-						<TodoDetail id={selectedId} afterExitEdit={afterExitEdit} />
-					)}
-				</FlexBox>
+				{/* <FlexBox flexDirection='column'> */}
+				{selectedId && (
+					<TodoDetail id={selectedId} afterExitEdit={afterExitEdit} />
+				)}
+				{/* </FlexBox> */}
 			</FlexBox>
 		</MainLayout>
 	);

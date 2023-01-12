@@ -5,6 +5,7 @@ export const Frame = styled.div``;
 export const MenuHeader = styled.div`
 	text-align: center;
 	border-bottom: 1px solid black;
+	font-weight: bold;
 `;
 
 export const MenuItem = styled.div`

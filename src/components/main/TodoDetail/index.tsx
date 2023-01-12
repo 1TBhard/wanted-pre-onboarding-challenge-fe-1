@@ -5,6 +5,9 @@ import { ChangeEventHandler, useEffect, useState } from "react";
 import { FlexBox } from "src/components/common/FlexBox";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
+import * as Styled from "./TodoDetail.style";
+import { LabelInput } from "src/components/common/LabelInput";
+import { LabelTextArea } from "src/components/common/LabelTextarea";
 
 interface TodoDetailProps {
 	id: string;
@@ -45,10 +48,6 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 		}
 	};
 
-	const onClickCancel = () => {
-		afterExitEdit();
-	};
-
 	const fetchTodo = async () => {
 		try {
 			const { data: originTodo } = await getTodo(id);
@@ -75,30 +74,29 @@ export const TodoDetail = ({ id, afterExitEdit }: TodoDetailProps) => {
 	}, [id]);
 
 	return (
-		<FlexBox
-			flexDirection='column'
-			alignItems={"stretch"}
-			justifyContent='start'
-		>
+		<Styled.Frame>
 			<FlexBox justifyContent={"flex-end"}>
-				<Button label='제출' onClick={onClickSubmit} />
-				<Button label='취소' onClick={onClickCancel} />
+				<Button label='수정' onClick={onClickSubmit} />
+				{/* <Button label='취소' onClick={onClickCancel} /> */}
 			</FlexBox>
 
-			<article>
+			<Styled.Article>
 				<FlexBox flexDirection='column' alignItems={"stretch"}>
-					<input
-						placeholder='제목을 입력해주세요.'
+					<LabelInput
+						label='제목'
+						name='todo-title'
+						type={"text"}
 						value={currentTitle}
 						onChange={onChangeTitle}
 					/>
-					<textarea
-						placeholder='내용을 입력해주세요.'
+					<LabelTextArea
+						label='상세'
+						name='todo-detail'
 						value={currentContent}
 						onChange={onChangeContent}
 					/>
 				</FlexBox>
-			</article>
-		</FlexBox>
+			</Styled.Article>
+		</Styled.Frame>
 	);
 };
