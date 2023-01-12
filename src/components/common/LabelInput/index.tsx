@@ -15,12 +15,12 @@ export const LabelInput = ({
 	error?: string;
 }) => {
 	return (
-		<Style.Frame className='label-wrapper mb-16'>
-			<Style.Label htmlFor={name}>{label}</Style.Label>
-			<Style.Input id={name} {...restInputProps} />
-			<Style.ErrorDescription className='input-error'>
-				{error}
-			</Style.ErrorDescription>
+		<Style.Frame>
+			<Style.Body>
+				<Style.Label htmlFor={name}>{label}</Style.Label>
+				<Style.Input id={name} {...restInputProps} />
+			</Style.Body>
+			<Style.Error>{error}</Style.Error>
 		</Style.Frame>
 	);
 };
