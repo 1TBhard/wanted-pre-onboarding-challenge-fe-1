@@ -1,4 +1,4 @@
-import { Todo } from "src/api/todo/getTodoList";
+import { Todo } from "src/api/todo/getTodo";
 import Response from "src/api/types/Response";
 import UtilApi from "src/utils/UtilApi";
 
