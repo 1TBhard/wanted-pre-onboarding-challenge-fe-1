@@ -1,19 +1,21 @@
 import { HTMLInputTypeAttribute } from "react";
 import * as Style from "./LabelInput.style";
 
-export const LabelInput = ({
-	label,
-	name,
-	error,
-	...restInputProps
-}: {
+export interface LabelInputProps {
 	label?: string;
 	name: string;
 	value: any;
 	type: HTMLInputTypeAttribute;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	error?: string;
-}) => {
+}
+
+export const LabelInput = ({
+	label,
+	name,
+	error,
+	...restInputProps
+}: LabelInputProps) => {
 	return (
 		<Style.Frame>
 			<Style.Body>
