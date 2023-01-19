@@ -1,5 +1,6 @@
 import { Todo } from "src/api/todo/getTodo";
 import Response from "src/api/types/Response";
+import CustomError from "src/utils/CustomError";
 import UtilApi from "src/utils/UtilApi";
 
 export default async function postTodo({

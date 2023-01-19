@@ -7,5 +7,5 @@ export default async function getTodoList() {
 
 	return UtilApi.get<Response<Todo[]>>({
 		url,
-	});
+	}).then((response) => response.data);
 }

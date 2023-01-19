@@ -12,7 +12,7 @@ export interface Todo {
 export default async function getTodo(id: string) {
 	const url = "/todos/:id".replace(":id", id);
 
-	return UtilApi.get<Response<Todo>>({
+	return UtilApi.get<Response<Todo | null>>({
 		url,
-	});
+	}).then((response) => response.data);
 }
