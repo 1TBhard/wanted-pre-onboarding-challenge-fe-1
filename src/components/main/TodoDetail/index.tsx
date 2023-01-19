@@ -1,6 +1,4 @@
 import * as Styled from "./TodoDetail.style";
-import deleteTodo from "src/api/todo/deleteTodo";
-import putTodo from "src/api/todo/putTodo";
 import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { Button } from "src/components/common/Button";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -12,25 +10,23 @@ import {
 import { FlexBox } from "src/components/common/FlexBox";
 import { LabelInput } from "src/components/common/LabelInput";
 import { LabelTextArea } from "src/components/common/LabelTextarea";
-import { Todo } from "src/api/todo/getTodo";
+import {
+	useDeleteTodoMutation,
+	useGetTodoByIdQuery,
+	useUpdateTodoMutation,
+} from "src/queries/todo";
 
-interface TodoDetailProps extends Todo {
-	afterExitEdit: () => void;
-	afterDelete: () => void;
-}
+export const TodoDetail = ({ id }: { id: string }) => {
+	const { data: originTodo } = useGetTodoByIdQuery(id);
+	const { mutate: updateTodo } = useUpdateTodoMutation();
+	const { mutate: deleteTodo } = useDeleteTodoMutation();
 
-export const TodoDetail = ({
-	id,
-	afterExitEdit,
-	afterDelete,
-	title: originTitle,
-	content: originContent,
-}: TodoDetailProps) => {
 	const [currentTitle, setCurrentTitle] = useState("");
 	const [currentContent, setCurrentContent] = useState("");
 
 	const isSameOrigin =
-		originTitle === currentTitle && originContent === currentContent;
+		originTodo?.title === currentTitle &&
+		originTodo?.content === currentContent;
 
 	const onChangeTitle: ChangeEventHandler<HTMLInputElement> = (e) => {
 		const nextTitle = e.target.value;
@@ -53,25 +49,16 @@ export const TodoDetail = ({
 	};
 
 	const onClickSubmit = async () => {
-		try {
-			await putTodo({ id, title: currentTitle, content: currentContent });
-			alert("수정되었습니다.");
-			await afterExitEdit();
-		} catch (error) {
-			console.error(error);
-			alert(error.message);
-		}
+		await updateTodo({
+			id,
+			title: currentTitle,
+			content: currentContent,
+		});
 	};
 
 	const onClickDelete = async () => {
 		if (confirm(DELETE_WARNING)) {
-			try {
-				await deleteTodo(id);
-				await afterDelete();
-			} catch (error) {
-				console.error(error);
-				alert(error.message);
-			}
+			await deleteTodo(id);
 		}
 	};
 
@@ -82,13 +69,13 @@ export const TodoDetail = ({
 		}>(CURRENT_TODO_CONTEXT);
 
 		if (initContent) {
-			setCurrentContent(initContent.content);
-			setCurrentTitle(initContent.title);
+			setCurrentContent(() => initContent?.content);
+			setCurrentTitle(() => initContent?.title);
 		} else {
-			setCurrentTitle(originTitle);
-			setCurrentContent(originContent);
+			setCurrentContent(() => originTodo?.content);
+			setCurrentTitle(() => originTodo?.title);
 		}
-	}, [id, originTitle, originContent]);
+	}, [originTodo]);
 
 	return (
 		<Styled.Frame>

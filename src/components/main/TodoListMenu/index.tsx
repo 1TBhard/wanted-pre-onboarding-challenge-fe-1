@@ -1,21 +1,17 @@
 import * as Styled from "./TodoListMenu.style";
+import UtilLocalStorage from "src/utils/UtilLocalStorage";
 import { Button } from "src/components/common/Button";
+import { CURRENT_TODO_CONTEXT } from "src/constants/LOCAL_STORAGE_KEY";
 import { FlexBox } from "src/components/common/FlexBox";
 import { PostModal } from "src/components/main/TodoListMenu/PostModal";
-import { Todo } from "src/api/todo/getTodo";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useTodoListQuery } from "src/queries/todo";
 
-interface TodoListMenuProps {
-	todoList?: Todo[];
-	onClickTodoDetail: (nextId: string) => void;
-	afterAddTodo: () => Promise<void>;
-}
+export const TodoListMenu = () => {
+	const { data: todoList } = useTodoListQuery();
+	const navigate = useNavigate();
 
-export const TodoListMenu = ({
-	todoList,
-	onClickTodoDetail,
-	afterAddTodo,
-}: TodoListMenuProps) => {
 	const [isShowModal, setIsShowModal] = useState(false);
 	const onClickAddTodo = () => {
 		setIsShowModal(true);
@@ -23,6 +19,14 @@ export const TodoListMenu = ({
 
 	const hideModal = () => {
 		setIsShowModal(false);
+	};
+
+	const onClickTodoDetail = (nextId: string) => {
+		UtilLocalStorage.remove(CURRENT_TODO_CONTEXT);
+		navigate(`?selectedId=${nextId}`, {
+			relative: "route",
+			preventScrollReset: true,
+		});
 	};
 
 	return (
@@ -42,11 +46,7 @@ export const TodoListMenu = ({
 					<Button label='추가' width={"100%"} onClick={onClickAddTodo} />
 				</FlexBox>
 			</Styled.Frame>
-			<PostModal
-				isShow={isShowModal}
-				hideModal={hideModal}
-				afterAddTodo={afterAddTodo}
-			/>
+			<PostModal isShow={isShowModal} hideModal={hideModal} />
 		</>
 	);
 };

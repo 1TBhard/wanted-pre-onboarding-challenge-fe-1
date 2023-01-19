@@ -1,36 +1,36 @@
 import * as Styled from "./PostModal.style";
 import Modal, { ModalProps } from "src/components/common/Modal/indext";
-import postTodo from "src/api/todo/postTodo";
+import UtilObject from "src/utils/UtilObject";
 import { Button } from "src/components/common/Button";
 import { FlexBox } from "src/components/common/FlexBox";
 import { LabelInput, LabelInputProps } from "src/components/common/LabelInput";
 import { LabelTextArea } from "src/components/common/LabelTextarea";
-import { useState } from "react";
 import { PLEASE_INPUT_TITLE } from "src/constants/WARNING_MESSAGE";
-import UtilObject from "src/utils/UtilObject";
+import { useCreateTodoMutation } from "src/queries/todo";
+import { useState } from "react";
 
 interface PostModalProps extends Pick<ModalProps, "isShow"> {
 	hideModal: () => void;
-	afterAddTodo: () => Promise<void>;
 }
 
-export const PostModal = ({
-	isShow,
-	afterAddTodo,
-	hideModal,
-}: PostModalProps) => {
+export const PostModal = ({ isShow, hideModal }: PostModalProps) => {
 	const [title, setTitle] = useState("");
 	const [detail, setDetail] = useState("");
 	const [error, setError] = useState<{ title?: string; detail?: string }>({});
+	const { mutate, isLoading } = useCreateTodoMutation(hideModal);
 
 	const isValidate = () => {
 		return title && UtilObject.isEmpty(UtilObject.removeFalsy(error));
 	};
 
-	const onClickCancel = () => {
+	const resetContext = () => {
 		setTitle("");
 		setDetail("");
 		setError({});
+	};
+
+	const onClickCancel = () => {
+		resetContext();
 		hideModal();
 	};
 
@@ -41,9 +41,7 @@ export const PostModal = ({
 		}
 
 		try {
-			await postTodo({ content: detail, title });
-			await afterAddTodo();
-			hideModal();
+			await mutate({ content: detail, title });
 		} catch (error) {
 			console.error(error);
 			alert(error.message);
@@ -92,8 +90,14 @@ export const PostModal = ({
 			</Styled.ModalForm>
 
 			<FlexBox>
-				<Button label='저장' onClick={onClickOk} width={"100%"} />
 				<Button
+					disabled={isLoading}
+					label='저장'
+					onClick={onClickOk}
+					width={"100%"}
+				/>
+				<Button
+					disabled={isLoading}
 					label='취소'
 					colorType='warning'
 					onClick={onClickCancel}
